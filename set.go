@@ -1,6 +1,7 @@
 package set
 
 import (
+	"fmt"
 	"sync"
 )
 
@@ -68,4 +69,17 @@ func (s *Set) Size() int {
 	defer s.mutex.RUnlock()
 
 	return len(s.m)
+}
+
+// String returns a string representation of this set
+func (s *Set) String() string {
+	// Print identifier
+	str := fmt.Sprintf("Set(%d):[ ", s.Size())
+
+	// Print all elements
+	for k, _ := range s.m {
+		str = str + fmt.Sprintf("%v ", k)
+	}
+
+	return str + "]"
 }

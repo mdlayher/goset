@@ -34,6 +34,8 @@ func TestAdd(t *testing.T) {
 			t.Fatalf("set.Add(%d) - unexpected result: %t", test.element, ok)
 		}
 	}
+
+	log.Println(set)
 }
 
 // TestHas verifies that the set.Has() method is working properly
@@ -65,6 +67,8 @@ func TestHas(t *testing.T) {
 			t.Fatalf("set.Has(%d) - unexpected result: %t", test.element, ok)
 		}
 	}
+
+	log.Println(set)
 }
 
 // TestSize verifies that the set.Size() method is working properly
@@ -103,4 +107,6 @@ func TestSize(t *testing.T) {
 			t.Fatalf("set.Size()- unexpected result: %d", set.Size())
 		}
 	}
+
+	log.Println(set)
 }
