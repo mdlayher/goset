@@ -185,7 +185,7 @@ func TestFilter(t *testing.T) {
 			New(1, 2, 3, 4, 5, 6),
 			New(2, 4, 6),
 			func(value interface{}) bool {
-				return value.(int) % 2 == 0
+				return value.(int)%2 == 0
 			},
 		},
 		// Name filtering function
