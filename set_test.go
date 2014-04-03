@@ -200,6 +200,38 @@ func TestHas(t *testing.T) {
 	log.Println(set)
 }
 
+// TestIntersection verifies that the set.Intersection() method is working properly
+func TestIntersection(t *testing.T) {
+	log.Println("TestIntersection()")
+
+	// Create a set, add some initial values
+	set := New(1, 3, 5)
+
+	// Create a table of tests and expected results of Set intersections
+	var tests = []struct {
+		source *Set
+		target *Set
+	}{
+		// Same items
+		{New(1, 3, 5), New(1, 3, 5)},
+		// New items (no intersection)
+		{New(2, 4, 6), New()},
+		// Combination of items
+		{New(1, 2, 6), New(1)},
+	}
+
+	// Iterate test table, checking results
+	for _, test := range tests {
+		// Attempt to add an element to the set, verify result
+		intersection := set.Intersection(test.source)
+		if !intersection.Equal(test.target) {
+			t.Fatalf("set.Intersection() - sets not equal: %s != %s", intersection.String(), test.target.String())
+		}
+
+		log.Println(intersection)
+	}
+}
+
 // TestRemove verifies that the set.Remove() method is working properly
 func TestRemove(t *testing.T) {
 	log.Println("TestRemove()")

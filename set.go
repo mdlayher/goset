@@ -47,7 +47,7 @@ func (s *Set) Add(value interface{}) bool {
 }
 
 // Clone copies the current set into a new, identical set
-func (s Set) Clone() *Set {
+func (s *Set) Clone() *Set {
 	// Copy set into a new set
 	outSet := New()
 	for _, v := range s.Enumerate() {
@@ -59,7 +59,7 @@ func (s Set) Clone() *Set {
 
 // Difference returns a set containing all elements present in this set, but
 // without any elements present in the parameter set
-func (s Set) Difference(paramSet *Set) *Set {
+func (s *Set) Difference(paramSet *Set) *Set {
 	// Create a set of differences between the sets
 	diffSet := New()
 
@@ -101,7 +101,7 @@ func (s *Set) Enumerate() []interface{} {
 
 // Equal returns whether or not two sets have the same length and
 // no differences, meaning they are equal
-func (s Set) Equal(paramSet *Set) bool {
+func (s *Set) Equal(paramSet *Set) bool {
 	return s.Size() == paramSet.Size() && s.Difference(paramSet).Size() == 0
 }
 
@@ -119,6 +119,21 @@ func (s *Set) Has(value interface{}) bool {
 
 	// Value not found
 	return false
+}
+
+// Intersection returns a set containing all elements present in both the
+// current set and the parameter set
+func (s *Set) Intersection(paramSet *Set) *Set {
+	// Copy current set, create a set of intersections between the sets
+	intSet := s.Clone()
+
+	// Get all differences between the sets
+	for _, d := range s.Difference(paramSet).Enumerate() {
+		// Remove all different elements
+		intSet.Remove(d)
+	}
+
+	return intSet
 }
 
 // Remove destroys an element in the set, returning true if the element was
@@ -161,7 +176,7 @@ func (s *Set) String() string {
 
 // Subset determines if a parameter set is a subset of elements within this
 // set, returning true if it is a subset, or false if it is not
-func (s Set) Subset(paramSet *Set) bool {
+func (s *Set) Subset(paramSet *Set) bool {
 	// Check if all elements in the parameter set are contained within the set
 	for _, v := range paramSet.Enumerate() {
 		// Check if element is contained, if not, return false
@@ -175,7 +190,7 @@ func (s Set) Subset(paramSet *Set) bool {
 
 // Union returns a set containing all elements present in this set, as well
 // as all elements present in the parameter set
-func (s Set) Union(paramSet *Set) *Set {
+func (s *Set) Union(paramSet *Set) *Set {
 	// Clone the current set into a new set
 	outSet := s.Clone()
 
