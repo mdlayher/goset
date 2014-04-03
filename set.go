@@ -45,6 +45,37 @@ func (s *Set) Add(value interface{}) bool {
 	return !found
 }
 
+// Pair represents a pair of elements created from a cartesian product
+type Pair struct {
+	X interface{}
+	Y interface{}
+}
+
+// String returns a string representation of this pair
+func (p *Pair) String() string {
+	return fmt.Sprintf("(%v, %v)", p.X, p.Y)
+}
+
+// CartesianProduct returns a set containing ordered pairs of every permutation between two sets
+func (s *Set) CartesianProduct(t *Set) *Set {
+	// Create a set of ordered pair permutations between the sets
+	cpSet := New()
+
+	// Enumerate the source set
+	for _, x := range s.Enumerate() {
+		// Enumerate the target set
+		for _, y := range t.Enumerate() {
+			// Create pair, insert elements, insert into set
+			cpSet.Add(Pair{
+				X: x,
+				Y: y,
+			})
+		}
+	}
+
+	return cpSet
+}
+
 // Clone copies the current set into a new, identical set
 func (s *Set) Clone() *Set {
 	// Copy set into a new set
@@ -256,7 +287,12 @@ func (s *Set) String() string {
 
 	// Print all elements
 	for k, _ := range s.m {
-		str = str + fmt.Sprintf("%v ", k)
+		// Print pairs separately
+		if pair, ok := k.(Pair); ok {
+			str = str + fmt.Sprintf("%v ", pair.String())
+		} else {
+			str = str + fmt.Sprintf("%v ", k)
+		}
 	}
 
 	return str + "}"

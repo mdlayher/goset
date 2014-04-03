@@ -44,6 +44,38 @@ func TestAdd(t *testing.T) {
 	}
 }
 
+// TestCartesianProduct verifies that the set.CartesianProduct() method is working properly
+func TestCartesianProduct(t *testing.T) {
+	log.Println("TestCartesianProduct()")
+
+	// Create a set, add some initial values
+	set := New(1, 2)
+
+	// Create a table of tests and expected results of Set cartesian products
+	var tests = []struct {
+		source *Set
+		target *Set
+	}{
+		// Same items
+		{New(1, 2), New(Pair{1, 1}, Pair{1, 2}, Pair{2, 1}, Pair{2, 2})},
+		// New items
+		{New(3, 4), New(Pair{1, 3}, Pair{1, 4}, Pair{2, 3}, Pair{2, 4})},
+		// Combination of items
+		{New(1, 2, 3), New(Pair{1, 1}, Pair{1, 2}, Pair{1, 3}, Pair{2, 1}, Pair{2, 2}, Pair{2, 3})},
+	}
+
+	// Iterate test table, checking results
+	for _, test := range tests {
+		// Attempt to get the cartesian product between sets, verify result
+		product := set.CartesianProduct(test.source)
+		if !product.Equal(test.target) {
+			t.Fatalf("set.CartesianProduct() - sets not equal: %s != %s", product.String(), test.target.String())
+		}
+
+		log.Println(set, "×", test.source, "=", product)
+	}
+}
+
 // TestClone verifies that the set.Clone() method is working properly
 func TestClone(t *testing.T) {
 	log.Println("TestClone()")
