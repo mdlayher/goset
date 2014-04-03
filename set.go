@@ -136,6 +136,20 @@ func (s *Set) Intersection(paramSet *Set) *Set {
 	return intSet
 }
 
+// Map applies a function over all elements of the set, and returns the resulting set
+func (s *Set) Map(fn func(interface{}) interface{}) *Set {
+	// Create a set to return with function applied
+	mapSet := New()
+
+	// Enumerate all elements and apply the function
+	for _, e := range s.Enumerate() {
+		// Apply the function, capture result
+		mapSet.Add(fn(e))
+	}
+
+	return mapSet
+}
+
 // Remove destroys an element in the set, returning true if the element was
 // destroyed, or false if it did not exist
 func (s *Set) Remove(value interface{}) bool {

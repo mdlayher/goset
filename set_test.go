@@ -1,7 +1,10 @@
 package set
 
 import (
+	"crypto/sha1"
+	"fmt"
 	"log"
+	"strings"
 	"testing"
 )
 
@@ -229,6 +232,56 @@ func TestIntersection(t *testing.T) {
 		}
 
 		log.Println(intersection)
+	}
+}
+
+// TestMap verifies that the set.Map() method is working properly
+func TestMap(t *testing.T) {
+	log.Println("TestMap()")
+
+	// Create a table of tests and expected results of Set mapping functions
+	var tests = []struct {
+		source *Set
+		target *Set
+		fn     func(interface{}) interface{}
+	}{
+		// Square function
+		{
+			New(1, 3, 5),
+			New(1, 9, 25),
+			func(value interface{}) interface{} {
+				return value.(int) * value.(int)
+			},
+		},
+		// String replace
+		{
+			New("cat", "dog", "cow"),
+			New("cat", "dog"),
+			func(value interface{}) interface{} {
+				return strings.Replace(value.(string), "cow", "cat", -1)
+			},
+		},
+		// SHA1
+		{
+			New("hello", "world"),
+			New("aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d", "7c211433f02071597741e6ff5a8ea34789abbf43"),
+			func(value interface{}) interface{} {
+				sha := sha1.New()
+				sha.Write([]byte(value.(string)))
+				return fmt.Sprintf("%x", sha.Sum(nil))
+			},
+		},
+	}
+
+	// Iterate test table, checking results
+	for _, test := range tests {
+		// Attempt to apply function to set, verify result
+		mapSet := test.source.Map(test.fn)
+		if !mapSet.Equal(test.target) {
+			t.Fatalf("set.Map() - sets not equal: %s != %s", mapSet.String(), test.target.String())
+		}
+
+		log.Println(mapSet)
 	}
 }
 
