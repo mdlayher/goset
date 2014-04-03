@@ -62,6 +62,22 @@ func (s *Set) Has(value interface{}) bool {
 	return false
 }
 
+// Remove destroys an element in the set, returning true if the element was
+// destroyed, or false if it did not exist
+func (s *Set) Remove(value interface{}) bool {
+	// Check existence
+	found := s.Has(value)
+
+	// Lock set for write
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
+
+	// Remove value from set
+	delete(s.m, value)
+
+	return found
+}
+
 // Size returns the size or cardinality of this set
 func (s *Set) Size() int {
 	// Lock set for read

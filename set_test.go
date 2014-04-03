@@ -71,6 +71,39 @@ func TestHas(t *testing.T) {
 	log.Println(set)
 }
 
+// TestRemove verifies that the set.Remove() method is working properly
+func TestRemove(t *testing.T) {
+	log.Println("TestRemove()")
+
+	// Create a set, add some initial values
+	set := New(1, 3, 5)
+
+	// Create a table of tests and expected results for removing elements
+	var tests = []struct {
+		element interface{}
+		result  bool
+	}{
+		// Existing items
+		{1, true},
+		{3, true},
+		{5, true},
+		// Non-existant items
+		{2, false},
+		{4, false},
+		{6, false},
+	}
+
+	// Iterate test table, checking results
+	for _, test := range tests {
+		// Attempt to remove an element from the set, verify result
+		if ok := set.Remove(test.element); ok != test.result {
+			t.Fatalf("set.Remove(%d) - unexpected result: %t", test.element, ok)
+		}
+	}
+
+	log.Println(set)
+}
+
 // TestSize verifies that the set.Size() method is working properly
 func TestSize(t *testing.T) {
 	log.Println("TestSize()")
