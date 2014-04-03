@@ -201,7 +201,7 @@ func powerSet(set *Set) *Set {
 func (s *Set) PowerSet() *Set {
 	// If set is empty, return set of empty set
 	if s.Size() == 0 {
-		pset := New()
+		pSet := New()
 		pSet.Add(New())
 		return pSet
 	}
