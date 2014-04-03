@@ -273,6 +273,39 @@ func TestSize(t *testing.T) {
 	log.Println(set)
 }
 
+// TestSubset verifies that the set.Subset() method is working properly
+func TestSubset(t *testing.T) {
+	log.Println("TestSubset()")
+
+	// Create a set, add some initial values
+	set := New(1, 3, 5)
+
+	// Create a table of tests and expected results of Set subsets
+	var tests = []struct {
+		source *Set
+		result bool
+	}{
+		// Empty set
+		{New(), true},
+		// Same items
+		{New(1, 3, 5), true},
+		// New items
+		{New(2, 4, 6), false},
+		// Combination of items
+		{New(1, 2, 6), false},
+	}
+
+	// Iterate test table, checking results
+	for _, test := range tests {
+		// Attempt to check if set is a subset, verify result
+		if set.Subset(test.source) != test.result {
+			t.Fatalf("set.Subset() - unexpected result: %t", test.result)
+		}
+
+		log.Println(test.source)
+	}
+}
+
 // TestUnion verifies that the set.Union() method is working properly
 func TestUnion(t *testing.T) {
 	log.Println("TestUnion()")

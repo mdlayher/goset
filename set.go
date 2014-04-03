@@ -159,6 +159,20 @@ func (s *Set) String() string {
 	return str + "]"
 }
 
+// Subset determines if a parameter set is a subset of elements within this
+// set, returning true if it is a subset, or false if it is not
+func (s Set) Subset(paramSet *Set) bool {
+	// Check if all elements in the parameter set are contained within the set
+	for _, v := range paramSet.Enumerate() {
+		// Check if element is contained, if not, return false
+		if !s.Has(v) {
+			return false
+		}
+	}
+
+	return true
+}
+
 // Union returns a set containing all elements present in this set, as well
 // as all elements present in the parameter set
 func (s Set) Union(paramSet *Set) *Set {
