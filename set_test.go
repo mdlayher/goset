@@ -32,13 +32,16 @@ func TestAdd(t *testing.T) {
 
 	// Iterate test table, checking results
 	for _, test := range tests {
+		tempSet := set.Clone()
+
 		// Attempt to add an element to the set, verify result
-		if ok := set.Add(test.element); ok != test.result {
+		ok := set.Add(test.element)
+		if ok != test.result {
 			t.Fatalf("set.Add(%d) - unexpected result: %t", test.element, ok)
 		}
-	}
 
-	log.Println(set)
+		log.Println(tempSet, "+", test.element, "=", set)
+	}
 }
 
 // TestClone verifies that the set.Clone() method is working properly
@@ -98,7 +101,7 @@ func TestDifference(t *testing.T) {
 			t.Fatalf("set.Difference() - sets not equal: %s != %s", difference.String(), test.target.String())
 		}
 
-		log.Println(difference)
+		log.Println(set, "\\", test.source, "=", difference)
 	}
 }
 
@@ -134,7 +137,7 @@ func TestEnumerate(t *testing.T) {
 		}
 	}
 
-	log.Println(set)
+	log.Println(set, "->", set.Enumerate())
 }
 
 // TestEqual verifies that the set.Equal() method is working properly
@@ -215,7 +218,7 @@ func TestFilter(t *testing.T) {
 			t.Fatalf("set.Filter() - sets not equal: %s != %s", filterSet.String(), test.target.String())
 		}
 
-		log.Println(filterSet)
+		log.Println("filter(", test.source, ") ->", filterSet)
 	}
 }
 
@@ -247,9 +250,9 @@ func TestHas(t *testing.T) {
 		if ok := set.Has(test.element); ok != test.result {
 			t.Fatalf("set.Has(%d) - unexpected result: %t", test.element, ok)
 		}
-	}
 
-	log.Println(set)
+		log.Println(test.element, "∈", set, ":", test.result)
+	}
 }
 
 // TestIntersection verifies that the set.Intersection() method is working properly
@@ -280,7 +283,7 @@ func TestIntersection(t *testing.T) {
 			t.Fatalf("set.Intersection() - sets not equal: %s != %s", intersection.String(), test.target.String())
 		}
 
-		log.Println(intersection)
+		log.Println(set, "∩", test.source, "=", intersection)
 	}
 }
 
@@ -330,7 +333,7 @@ func TestMap(t *testing.T) {
 			t.Fatalf("set.Map() - sets not equal: %s != %s", mapSet.String(), test.target.String())
 		}
 
-		log.Println(mapSet)
+		log.Println("map(", test.source, ") ->", mapSet)
 	}
 }
 
@@ -339,7 +342,8 @@ func TestPowerSet(t *testing.T) {
 	log.Println("TestPowerSet()")
 
 	// Create a set, add some initial values
-	powerSet := New(1, 3, 5).PowerSet()
+	startSet := New(1, 3, 5)
+	powerSet := startSet.PowerSet()
 
 	// Create a table of expected output from the power set
 	var tests = []*Set{
@@ -372,7 +376,7 @@ func TestPowerSet(t *testing.T) {
 		}
 	}
 
-	log.Println(powerSet)
+	log.Println("P(", startSet, ") ->", powerSet)
 }
 
 // TestReduce verifies that the set.Reduce() method is working properly
@@ -422,11 +426,12 @@ func TestReduce(t *testing.T) {
 	// Iterate test table, checking results
 	for _, test := range tests {
 		// Attempt to apply function to set, verify result
-		if out := test.source.Reduce(test.value, test.fn); out != test.result {
+		out := test.source.Reduce(test.value, test.fn)
+		if out != test.result {
 			t.Fatalf("set.Reduce() - unexpected result: %v", out)
 		}
 
-		log.Println(test.source)
+		log.Println("reduce(", test.source, ") ->", out)
 	}
 }
 
@@ -454,13 +459,15 @@ func TestRemove(t *testing.T) {
 
 	// Iterate test table, checking results
 	for _, test := range tests {
+		tempSet := set.Clone()
+
 		// Attempt to remove an element from the set, verify result
 		if ok := set.Remove(test.element); ok != test.result {
 			t.Fatalf("set.Remove(%d) - unexpected result: %t", test.element, ok)
 		}
-	}
 
-	log.Println(set)
+		log.Println(tempSet, "-", test.element, "=", set)
+	}
 }
 
 // TestSize verifies that the set.Size() method is working properly
@@ -498,9 +505,10 @@ func TestSize(t *testing.T) {
 		if set.Size() != test.size {
 			t.Fatalf("set.Size()- unexpected result: %d", set.Size())
 		}
+
+		log.Println("|", set, "| =", set.Size())
 	}
 
-	log.Println(set)
 }
 
 // TestSubset verifies that the set.Subset() method is working properly
@@ -532,7 +540,7 @@ func TestSubset(t *testing.T) {
 			t.Fatalf("set.Subset() - unexpected result: %t", test.result)
 		}
 
-		log.Println(test.source)
+		log.Println(set, "⊆", test.source, ":", test.result)
 	}
 }
 
@@ -562,7 +570,7 @@ func TestSymmetricDifference(t *testing.T) {
 			t.Fatalf("set.SymmetricDifference() - sets not equal: %s != %s", symDiff.String(), test.result.String())
 		}
 
-		log.Println(symDiff)
+		log.Println(test.source, "∆", test.target, "=", symDiff)
 	}
 }
 
@@ -594,6 +602,6 @@ func TestUnion(t *testing.T) {
 			t.Fatalf("set.Union() - sets not equal: %s != %s", union.String(), test.target.String())
 		}
 
-		log.Println(union)
+		log.Println(set, "∪", test.source, "=", union)
 	}
 }
