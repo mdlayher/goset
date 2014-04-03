@@ -495,6 +495,36 @@ func TestSubset(t *testing.T) {
 	}
 }
 
+// TestSymmetricDifference verifies that the set.SymmetricDifference() method is working properly
+func TestSymmetricDifference(t *testing.T) {
+	log.Println("TestSymmetricDifference()")
+
+	// Create a table of tests and expected results of Set symmetricDifferences
+	var tests = []struct {
+		source *Set
+		target *Set
+		result *Set
+	}{
+		// Same items
+		{New(1, 3, 5), New(1, 2, 3), New(2, 5)},
+		// Different items
+		{New(2, 4, 6), New(1, 3, 5), New(1, 2, 3, 4, 5, 6)},
+		// Combination of items
+		{New(1, 2, 6), New(1, 5), New(2, 5, 6)},
+	}
+
+	// Iterate test table, checking results
+	for _, test := range tests {
+		// Attempt to add an element to the set, verify result
+		symDiff := test.source.SymmetricDifference(test.target)
+		if !symDiff.Equal(test.result) {
+			t.Fatalf("set.SymmetricDifference() - sets not equal: %s != %s", symDiff.String(), test.result.String())
+		}
+
+		log.Println(symDiff)
+	}
+}
+
 // TestUnion verifies that the set.Union() method is working properly
 func TestUnion(t *testing.T) {
 	log.Println("TestUnion()")
