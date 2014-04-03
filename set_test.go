@@ -334,6 +334,47 @@ func TestMap(t *testing.T) {
 	}
 }
 
+// TestPowerSet verifies that the set.PowerSet() method is working properly
+func TestPowerSet(t *testing.T) {
+	log.Println("TestPowerSet()")
+
+	// Create a set, add some initial values
+	powerSet := New(1, 3, 5).PowerSet()
+
+	// Create a table of expected output from the power set
+	var tests = []*Set{
+		New(),
+		New(1),
+		New(1, 3),
+		New(1, 5),
+		New(1, 3, 5),
+		New(3),
+		New(3, 5),
+		New(5),
+	}
+
+	// Iterate all sets in the power set
+	for _, s := range powerSet.Enumerate() {
+		set := s.(*Set)
+		found := false
+
+		// Check each set against the tests to verify it exists
+		for _, test := range tests {
+			if set.Equal(test) {
+				found = true
+				break
+			}
+		}
+
+		// If set not found, test fails
+		if !found {
+			t.Fatalf("set.PowerSet() - set not found: %s", set.String())
+		}
+	}
+
+	log.Println(powerSet)
+}
+
 // TestReduce verifies that the set.Reduce() method is working properly
 func TestReduce(t *testing.T) {
 	log.Println("TestReduce()")

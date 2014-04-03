@@ -164,6 +164,52 @@ func (s *Set) Map(fn func(interface{}) interface{}) *Set {
 	return mapSet
 }
 
+// powerSet is called recursively to generate the power set, or set containing all
+// possible subsets
+func powerSet(set *Set) *Set {
+	// Create the output set
+	pSet := New()
+
+	// If set is empty, return the nil set
+	if set.Size() == 0 {
+		pSet.Add(New())
+		return pSet
+	}
+
+	// Get the head element of the set, and remove it
+	head := set.Enumerate()[0]
+	set.Remove(head)
+
+	// Get the "tail" power set, and add it to the set
+	tpSet := powerSet(set)
+	for _, tp := range tpSet.Enumerate() {
+		pSet.Add(tp)
+	}
+
+	// Iterate the "tail" power set and get the "head" power set,
+	// and add it to the set
+	for _, tp := range tpSet.Enumerate() {
+		hSet := tp.(*Set).Clone()
+		hSet.Add(head)
+		pSet.Add(hSet)
+	}
+
+	return pSet
+}
+
+// PowerSet generates a set of all possible subsets, given the current set
+func (s *Set) PowerSet() *Set {
+	// If set is empty, return set of empty set
+	if s.Size() == 0 {
+		pset := New()
+		pSet.Add(New())
+		return pSet
+	}
+
+	// Call the recursive powerSet function on a clone of this set
+	return powerSet(s.Clone())
+}
+
 // Reduce applies a function over all elements of the set, accumulating the results into a final result value
 func (s *Set) Reduce(value interface{}, fn func(interface{}, interface{}) interface{}) interface{} {
 	// Enumerate all elements and apply the function
@@ -201,11 +247,11 @@ func (s *Set) Size() int {
 // String returns a string representation of this set
 func (s *Set) String() string {
 	// Print identifier
-	str := fmt.Sprintf("Set(%d):[ ", s.Size())
+	str := "{ "
 
 	// Check for empty set, print symbol if empty
 	if s.Size() == 0 {
-		return str + "Ø ]"
+		return str + "Ø }"
 	}
 
 	// Print all elements
@@ -213,7 +259,7 @@ func (s *Set) String() string {
 		str = str + fmt.Sprintf("%v ", k)
 	}
 
-	return str + "]"
+	return str + "}"
 }
 
 // Subset determines if a parameter set is a subset of elements within this set, returning true if it
