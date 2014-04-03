@@ -334,6 +334,61 @@ func TestMap(t *testing.T) {
 	}
 }
 
+// TestReduce verifies that the set.Reduce() method is working properly
+func TestReduce(t *testing.T) {
+	log.Println("TestReduce()")
+
+	// Create a table of tests and expected results of Set reducing functions
+	var tests = []struct {
+		source *Set
+		value  interface{}
+		result interface{}
+		fn     func(interface{}, interface{}) interface{}
+	}{
+		// Summing function
+		{
+			New(1, 2, 3),
+			0,
+			6,
+			func(previous interface{}, value interface{}) interface{} {
+				return previous.(int) + value.(int)
+			},
+		},
+		// String transformation and concatenation
+		{
+			New("abc", "def", "ghi"),
+			"",
+			"ABCDEFGHI",
+			func(previous interface{}, value interface{}) interface{} {
+				return previous.(string) + strings.ToUpper(value.(string))
+			},
+		},
+		// Accumulate and square all integers
+		{
+			New(2, 4, 8, false, 16, "2", "4", 32),
+			0,
+			1364,
+			func(previous interface{}, value interface{}) interface{} {
+				if _, ok := value.(int); !ok {
+					return previous.(int)
+				}
+
+				return previous.(int) + (value.(int) * (value.(int)))
+			},
+		},
+	}
+
+	// Iterate test table, checking results
+	for _, test := range tests {
+		// Attempt to apply function to set, verify result
+		if out := test.source.Reduce(test.value, test.fn); out != test.result {
+			t.Fatalf("set.Reduce() - unexpected result: %v", out)
+		}
+
+		log.Println(test.source)
+	}
+}
+
 // TestRemove verifies that the set.Remove() method is working properly
 func TestRemove(t *testing.T) {
 	log.Println("TestRemove()")

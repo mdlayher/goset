@@ -167,6 +167,16 @@ func (s *Set) Map(fn func(interface{}) interface{}) *Set {
 	return mapSet
 }
 
+// Reduce applies a function over all elements of the set, and returns the resulting set
+func (s *Set) Reduce(value interface{}, fn func(interface{}, interface{}) interface{}) interface{} {
+	// Enumerate all elements and apply the function
+	for _, e := range s.Enumerate() {
+		value = fn(value, e)
+	}
+
+	return value
+}
+
 // Remove destroys an element in the set, returning true if the element was
 // destroyed, or false if it did not exist
 func (s *Set) Remove(value interface{}) bool {
