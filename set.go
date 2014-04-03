@@ -13,8 +13,7 @@ type Set struct {
 	m map[interface{}]struct{}
 }
 
-// New creates a new Set, and initializes its internal map, optionally adding
-// initial elements to the set
+// New creates a new Set, and initializes its internal map, optionally adding initial elements to the set
 func New(values ...interface{}) *Set {
 	// Initialize set
 	s := Set{
@@ -29,8 +28,8 @@ func New(values ...interface{}) *Set {
 	return &s
 }
 
-// Add inserts a new element into the set, returning true if the element was newly
-// added, or false if it already existed
+// Add inserts a new element into the set, returning true if the element was newly added, or false
+// if it already existed
 func (s *Set) Add(value interface{}) bool {
 	// Check existence
 	found := s.Has(value)
@@ -57,8 +56,8 @@ func (s *Set) Clone() *Set {
 	return outSet
 }
 
-// Difference returns a set containing all elements present in this set, but
-// without any elements present in the parameter set
+// Difference returns a set containing all elements present in this set, but without any elements
+// present in the parameter set
 func (s *Set) Difference(paramSet *Set) *Set {
 	// Create a set of differences between the sets
 	diffSet := New()
@@ -99,14 +98,13 @@ func (s *Set) Enumerate() []interface{} {
 	return values
 }
 
-// Equal returns whether or not two sets have the same length and
-// no differences, meaning they are equal
+// Equal returns whether or not two sets have the same length and no differences, meaning they are equal
 func (s *Set) Equal(paramSet *Set) bool {
 	return s.Size() == paramSet.Size() && s.Difference(paramSet).Size() == 0
 }
 
-// Filter applies a function over all elements of the set, and returns all elements
-// which return true when the function is applied
+// Filter applies a function over all elements of the set, and returns all elements which return true
+// when the function is applied
 func (s *Set) Filter(fn func(interface{}) bool) *Set {
 	// Create a set to return with elements which match filter function
 	filterSet := New()
@@ -138,8 +136,7 @@ func (s *Set) Has(value interface{}) bool {
 	return false
 }
 
-// Intersection returns a set containing all elements present in both the
-// current set and the parameter set
+// Intersection returns a set containing all elements present in both the current set and the parameter set
 func (s *Set) Intersection(paramSet *Set) *Set {
 	// Copy current set, create a set of intersections between the sets
 	intSet := s.Clone()
@@ -167,7 +164,7 @@ func (s *Set) Map(fn func(interface{}) interface{}) *Set {
 	return mapSet
 }
 
-// Reduce applies a function over all elements of the set, and returns the resulting set
+// Reduce applies a function over all elements of the set, accumulating the results into a final result value
 func (s *Set) Reduce(value interface{}, fn func(interface{}, interface{}) interface{}) interface{} {
 	// Enumerate all elements and apply the function
 	for _, e := range s.Enumerate() {
@@ -177,8 +174,7 @@ func (s *Set) Reduce(value interface{}, fn func(interface{}, interface{}) interf
 	return value
 }
 
-// Remove destroys an element in the set, returning true if the element was
-// destroyed, or false if it did not exist
+// Remove destroys an element in the set, returning true if the element was destroyed, or false if it did not exist
 func (s *Set) Remove(value interface{}) bool {
 	// Check existence
 	found := s.Has(value)
@@ -215,8 +211,8 @@ func (s *Set) String() string {
 	return str + "]"
 }
 
-// Subset determines if a parameter set is a subset of elements within this
-// set, returning true if it is a subset, or false if it is not
+// Subset determines if a parameter set is a subset of elements within this set, returning true if it
+// is a subset, or false if it is not
 func (s *Set) Subset(paramSet *Set) bool {
 	// Check if all elements in the parameter set are contained within the set
 	for _, v := range paramSet.Enumerate() {
@@ -229,8 +225,8 @@ func (s *Set) Subset(paramSet *Set) bool {
 	return true
 }
 
-// Union returns a set containing all elements present in this set, as well
-// as all elements present in the parameter set
+// Union returns a set containing all elements present in this set, as well as all elements present
+// in the parameter set
 func (s *Set) Union(paramSet *Set) *Set {
 	// Clone the current set into a new set
 	outSet := s.Clone()
