@@ -203,6 +203,11 @@ func (s *Set) String() string {
 	// Print identifier
 	str := fmt.Sprintf("Set(%d):[ ", s.Size())
 
+	// Check for empty set, print symbol if empty
+	if s.Size() == 0 {
+		return str + "Ø ]"
+	}
+
 	// Print all elements
 	for k, _ := range s.m {
 		str = str + fmt.Sprintf("%v ", k)
