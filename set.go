@@ -46,6 +46,44 @@ func (s *Set) Add(value interface{}) bool {
 	return !found
 }
 
+// Clone copies the current set into a new, identical set
+func (s Set) Clone() *Set {
+	// Copy set into a new set
+	outSet := New()
+	for _, v := range s.Enumerate() {
+		outSet.Add(v)
+	}
+
+	return outSet
+}
+
+// Difference returns a set containing all elements present in this set, but
+// without any elements present in the parameter set
+func (s Set) Difference(paramSet *Set) *Set {
+	// Create a set of differences between the sets
+	diffSet := New()
+
+	// Enumerate and check all elements in the current set
+	for _, e := range s.Enumerate() {
+		found := false
+
+		// Check if element is present in parameter set
+		for _, p := range paramSet.Enumerate() {
+			// Element found
+			if e == p {
+				found = true
+			}
+		}
+
+		// If element was not found, add it to diff set
+		if !found {
+			diffSet.Add(e)
+		}
+	}
+
+	return diffSet
+}
+
 // Enumerate returns an unordered slice of all elements in the set
 func (s *Set) Enumerate() []interface{} {
 	// Lock set for read
@@ -59,6 +97,12 @@ func (s *Set) Enumerate() []interface{} {
 	}
 
 	return values
+}
+
+// Equal returns whether or not two sets have the same length and
+// no differences, meaning they are equal
+func (s Set) Equal(paramSet *Set) bool {
+	return s.Size() == paramSet.Size() && s.Difference(paramSet).Size() == 0
 }
 
 // Has checks for membership of an element in the set
@@ -113,4 +157,18 @@ func (s *Set) String() string {
 	}
 
 	return str + "]"
+}
+
+// Union returns a set containing all elements present in this set, as well
+// as all elements present in the parameter set
+func (s Set) Union(paramSet *Set) *Set {
+	// Clone the current set into a new set
+	outSet := s.Clone()
+
+	// Enumerate and add all elements from the parameter set
+	for _, e := range paramSet.Enumerate() {
+		outSet.Add(e)
+	}
+
+	return outSet
 }

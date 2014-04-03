@@ -38,6 +38,67 @@ func TestAdd(t *testing.T) {
 	log.Println(set)
 }
 
+// TestClone verifies that the set.Clone() method is working properly
+func TestClone(t *testing.T) {
+	log.Println("TestClone()")
+
+	// Create a table of tests and expected results of cloning
+	var tests = []struct {
+		source *Set
+		target *Set
+		result bool
+	}{
+		// Same items
+		{New(1, 3, 5), New(1, 3, 5), true},
+		// Re-ordered items
+		{New(2, 4, 6), New(6, 4, 2), true},
+		// Different items
+		{New(1, 2, 3), New(1, 2, 3, 4), false},
+	}
+
+	// Iterate test table, checking results
+	for _, test := range tests {
+		// Attempt to clone the current set, verify result
+		if clone := test.source.Clone(); clone.Equal(test.target) != test.result {
+			t.Fatalf("set.Clone() - unexpected result: %t", test.result)
+		}
+
+		log.Println(test.source)
+	}
+}
+
+// TestDifference verifies that the set.Difference() method is working properly
+func TestDifference(t *testing.T) {
+	log.Println("TestDifference()")
+
+	// Create a set, add some initial values
+	set := New(1, 3, 5)
+
+	// Create a table of tests and expected results of Set differences
+	var tests = []struct {
+		source *Set
+		target *Set
+	}{
+		// Same items
+		{New(1, 3, 5), New()},
+		// New items (no difference)
+		{New(2, 4, 6), New(1, 3, 5)},
+		// Combination of items
+		{New(1, 2, 6), New(3, 5)},
+	}
+
+	// Iterate test table, checking results
+	for _, test := range tests {
+		// Attempt to add an element to the set, verify result
+		difference := set.Difference(test.source)
+		if !difference.Equal(test.target) {
+			t.Fatalf("set.Difference() - sets not equal: %s != %s", difference.String(), test.target.String())
+		}
+
+		log.Println(difference)
+	}
+}
+
 // TestEnumerate verifies that the set.Enumerate() method is working properly
 func TestEnumerate(t *testing.T) {
 	log.Println("TestEnumerate()")
@@ -71,6 +132,39 @@ func TestEnumerate(t *testing.T) {
 	}
 
 	log.Println(set)
+}
+
+// TestEqual verifies that the set.Equal() method is working properly
+func TestEqual(t *testing.T) {
+	log.Println("TestEqual()")
+
+	// Create a table of tests and expected results of cloning
+	var tests = []struct {
+		source *Set
+		target *Set
+		result bool
+	}{
+		// Same items
+		{New(1, 3, 5), New(1, 3, 5), true},
+		// Re-ordered items
+		{New(2, 4, 6), New(6, 4, 2), true},
+		// Repeated items
+		{New(1, 2, 3), New(1, 2, 3, 1, 2), true},
+		// Different items
+		{New(1, 2, 3), New(1, 2, 4), false},
+		// Different lengths
+		{New(2, 4, 6), New(2, 4, 6, 8), false},
+	}
+
+	// Iterate test table, checking results
+	for _, test := range tests {
+		// Check set equality
+		if test.source.Equal(test.target) != test.result {
+			t.Fatalf("set.Equal() - unexpected result: %t", test.result)
+		}
+
+		log.Println(test.source)
+	}
 }
 
 // TestHas verifies that the set.Has() method is working properly
@@ -177,4 +271,36 @@ func TestSize(t *testing.T) {
 	}
 
 	log.Println(set)
+}
+
+// TestUnion verifies that the set.Union() method is working properly
+func TestUnion(t *testing.T) {
+	log.Println("TestUnion()")
+
+	// Create a set, add some initial values
+	set := New(1, 3, 5)
+
+	// Create a table of tests and expected results of Set unions
+	var tests = []struct {
+		source *Set
+		target *Set
+	}{
+		// Same items
+		{New(1, 3, 5), New(1, 3, 5)},
+		// New items
+		{New(2, 4, 6), New(1, 2, 3, 4, 5, 6)},
+		// Combination of items
+		{New(1, 2, 3), New(1, 2, 3, 5)},
+	}
+
+	// Iterate test table, checking results
+	for _, test := range tests {
+		// Attempt to add an element to the set, verify result
+		union := set.Union(test.source)
+		if !union.Equal(test.target) {
+			t.Fatalf("set.Union() - sets not equal: %s != %s", union.String(), test.target.String())
+		}
+
+		log.Println(union)
+	}
 }
