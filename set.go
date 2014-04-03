@@ -46,6 +46,21 @@ func (s *Set) Add(value interface{}) bool {
 	return !found
 }
 
+// Enumerate returns an unordered slice of all elements in the set
+func (s *Set) Enumerate() []interface{} {
+	// Lock set for read
+	s.mutex.RLock()
+	defer s.mutex.RUnlock()
+
+	// Gather all values into a slice
+	values := make([]interface{}, 0)
+	for k, _ := range s.m {
+		values = append(values, k)
+	}
+
+	return values
+}
+
 // Has checks for membership of an element in the set
 func (s *Set) Has(value interface{}) bool {
 	// Lock set for read

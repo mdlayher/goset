@@ -38,6 +38,41 @@ func TestAdd(t *testing.T) {
 	log.Println(set)
 }
 
+// TestEnumerate verifies that the set.Enumerate() method is working properly
+func TestEnumerate(t *testing.T) {
+	log.Println("TestEnumerate()")
+
+	// Create a slice of expected values upon set enumeration
+	expected := []int{1, 3, 5, 7, 9}
+
+	// Create a set
+	set := New()
+
+	// Add initial values
+	for _, e := range expected {
+		set.Add(e)
+	}
+
+	// Enumerate the values in the set
+	for _, v := range set.Enumerate() {
+		found := false
+
+		// Check that the expected value was found upon set enumeration
+		for _, e := range expected {
+			if v == e {
+				found = true
+			}
+		}
+
+		// If value not found, test fails
+		if !found {
+			t.Fatalf("set.Enumerate() - element missing: %v", v)
+		}
+	}
+
+	log.Println(set)
+}
+
 // TestHas verifies that the set.Has() method is working properly
 func TestHas(t *testing.T) {
 	log.Println("TestHas()")
