@@ -105,6 +105,23 @@ func (s *Set) Equal(paramSet *Set) bool {
 	return s.Size() == paramSet.Size() && s.Difference(paramSet).Size() == 0
 }
 
+// Filter applies a function over all elements of the set, and returns all elements
+// which return true when the function is applied
+func (s *Set) Filter(fn func(interface{}) bool) *Set {
+	// Create a set to return with elements which match filter function
+	filterSet := New()
+
+	// Enumerate all elements and apply the function
+	for _, e := range s.Enumerate() {
+		// Apply the function, add elements which it matches
+		if fn(e) {
+			filterSet.Add(e)
+		}
+	}
+
+	return filterSet
+}
+
 // Has checks for membership of an element in the set
 func (s *Set) Has(value interface{}) bool {
 	// Lock set for read

@@ -170,6 +170,55 @@ func TestEqual(t *testing.T) {
 	}
 }
 
+// TestFilter verifies that the set.Filter() method is working properly
+func TestFilter(t *testing.T) {
+	log.Println("TestFilter()")
+
+	// Create a table of tests and expected results of Set filtering functions
+	var tests = []struct {
+		source *Set
+		target *Set
+		fn     func(interface{}) bool
+	}{
+		// Even number function
+		{
+			New(1, 2, 3, 4, 5, 6),
+			New(2, 4, 6),
+			func(value interface{}) bool {
+				return value.(int) % 2 == 0
+			},
+		},
+		// Name filtering function
+		{
+			New("C", "C++", "C#", "Go", "PHP", "Ruby"),
+			New("Go", "PHP", "Ruby"),
+			func(value interface{}) bool {
+				return !strings.HasPrefix(value.(string), "C")
+			},
+		},
+		// Filter data type function
+		{
+			New(0, 1, false, true, "0", "1"),
+			New(false, true),
+			func(value interface{}) bool {
+				_, ok := value.(bool)
+				return ok
+			},
+		},
+	}
+
+	// Iterate test table, checking results
+	for _, test := range tests {
+		// Attempt to apply function to set, verify result
+		filterSet := test.source.Filter(test.fn)
+		if !filterSet.Equal(test.target) {
+			t.Fatalf("set.Filter() - sets not equal: %s != %s", filterSet.String(), test.target.String())
+		}
+
+		log.Println(filterSet)
+	}
+}
+
 // TestHas verifies that the set.Has() method is working properly
 func TestHas(t *testing.T) {
 	log.Println("TestHas()")
