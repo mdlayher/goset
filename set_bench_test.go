@@ -114,3 +114,27 @@ func BenchmarkEqualSmall(b *testing.B) {
 func BenchmarkEqualLarge(b *testing.B) {
 	benchmarkEqual(b.N, New(1, 2, 3, 4, 5, 6, 7, 8, 9), New(9, 8, 7, 6, 5, 4, 3, 2, 1))
 }
+
+// benchmarkFilter checks the performance of the set.Filter() method
+func benchmarkFilter(n int, s *Set, fn func(interface{}) bool) {
+	// Run set.Filter() n times
+	for i := 0; i < n; i++ {
+		s.Filter(fn)
+	}
+}
+
+// BenchmarkFilterSmall checks the performance of the set.Filter() method
+// over a small data set
+func BenchmarkFilterSmall(b *testing.B) {
+	benchmarkFilter(b.N, New(1, 2), func(v interface{}) bool {
+		return v.(int)%2 == 0
+	})
+}
+
+// BenchmarkFilterLarge checks the performance of the set.Filter() method
+// over a large data set
+func BenchmarkFilterLarge(b *testing.B) {
+	benchmarkFilter(b.N, New(1, 2, 3, 4, 5, 6, 7, 8, 9), func(v interface{}) bool {
+		return v.(int)%2 == 0
+	})
+}
