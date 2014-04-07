@@ -299,3 +299,23 @@ func BenchmarkSymmetricDifferenceSmall(b *testing.B) {
 func BenchmarkSymmetricDifferenceLarge(b *testing.B) {
 	benchmarkSymmetricDifference(b.N, New(1, 2, 3, 4, 5, 6, 7, 8, 9), New(9, 8, 7, 6, 5, 4, 3, 2, 1))
 }
+
+// benchmarkUnion checks the performance of the set.Union() method
+func benchmarkUnion(n int, s *Set, t *Set) {
+	// Run set.Union() n times
+	for i := 0; i < n; i++ {
+		s.Union(t)
+	}
+}
+
+// BenchmarkUnionSmall checks the performance of the set.Union() method
+// over a small data set
+func BenchmarkUnionSmall(b *testing.B) {
+	benchmarkUnion(b.N, New(1, 2), New(2, 1))
+}
+
+// BenchmarkUnionLarge checks the performance of the set.Union() method
+// over a large data set
+func BenchmarkUnionLarge(b *testing.B) {
+	benchmarkUnion(b.N, New(1, 2, 3, 4, 5, 6, 7, 8, 9), New(9, 8, 7, 6, 5, 4, 3, 2, 1))
+}
