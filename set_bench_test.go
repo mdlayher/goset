@@ -138,3 +138,14 @@ func BenchmarkFilterLarge(b *testing.B) {
 		return v.(int)%2 == 0
 	})
 }
+
+// BenchmarkHas checks the performance of the set.Has() method
+func BenchmarkHas(b *testing.B) {
+	// Create a new set
+	set := New()
+
+	// Run set.Has() b.N times
+	for i := 0; i < b.N; i++ {
+		set.Has(i)
+	}
+}
