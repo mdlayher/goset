@@ -259,3 +259,23 @@ func BenchmarkSize(b *testing.B) {
 		set.Size()
 	}
 }
+
+// benchmarkSubset checks the performance of the set.Subset() method
+func benchmarkSubset(n int, s *Set, t *Set) {
+	// Run set.Subset() n times
+	for i := 0; i < n; i++ {
+		s.Subset(t)
+	}
+}
+
+// BenchmarkSubsetSmall checks the performance of the set.Subset() method
+// over a small data set
+func BenchmarkSubsetSmall(b *testing.B) {
+	benchmarkSubset(b.N, New(1, 2), New(2, 1))
+}
+
+// BenchmarkSubsetLarge checks the performance of the set.Subset() method
+// over a large data set
+func BenchmarkSubsetLarge(b *testing.B) {
+	benchmarkSubset(b.N, New(1, 2, 3, 4, 5, 6, 7, 8, 9), New(9, 8, 7, 6, 5, 4, 3, 2, 1))
+}
