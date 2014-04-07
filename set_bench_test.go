@@ -34,3 +34,23 @@ func BenchmarkCartesianProductSmall(b *testing.B) {
 func BenchmarkCartesianProductLarge(b *testing.B) {
 	benchmarkCartesianProduct(b.N, New(1, 2, 3, 4, 5, 6, 7, 8, 9), New(9, 8, 7, 6, 5, 4, 3, 2, 1))
 }
+
+// benchmarkClone checks the performance of the set.Clone() method
+func benchmarkClone(n int, s *Set) {
+	// Run set.Clone() n times
+	for i := 0; i < n; i++ {
+		s.Clone()
+	}
+}
+
+// BenchmarkCloneSmall checks the performance of the set.Clone() method
+// over a small data set
+func BenchmarkCloneSmall(b *testing.B) {
+	benchmarkClone(b.N, New(1, 2))
+}
+
+// BenchmarkCloneLarge checks the performance of the set.Clone() method
+// over a large data set
+func BenchmarkCloneLarge(b *testing.B) {
+	benchmarkClone(b.N, New(1, 2, 3, 4, 5, 6, 7, 8, 9))
+}
