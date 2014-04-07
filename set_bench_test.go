@@ -213,3 +213,27 @@ func BenchmarkPowerSetSmall(b *testing.B) {
 func BenchmarkPowerSetLarge(b *testing.B) {
 	benchmarkPowerSet(b.N, New(1, 2, 3, 4, 5, 6, 7, 8, 9))
 }
+
+// benchmarkReduce checks the performance of the set.Reduce() method
+func benchmarkReduce(n int, s *Set, fn func(interface{}, interface{}) interface{}) {
+	// Run set.Reduce() n times
+	for i := 0; i < n; i++ {
+		s.Reduce(i, fn)
+	}
+}
+
+// BenchmarkReduceSmall checks the performance of the set.Reduce() method
+// over a small data set
+func BenchmarkReduceSmall(b *testing.B) {
+	benchmarkReduce(b.N, New(1, 2), func(p interface{}, v interface{}) interface{} {
+		return p.(int) + v.(int)
+	})
+}
+
+// BenchmarkReduceLarge checks the performance of the set.Reduce() method
+// over a large data set
+func BenchmarkReduceLarge(b *testing.B) {
+	benchmarkReduce(b.N, New(1, 2, 3, 4, 5, 6, 7, 8, 9), func(p interface{}, v interface{}) interface{} {
+		return p.(int) + v.(int)
+	})
+}
