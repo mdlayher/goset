@@ -193,3 +193,23 @@ func BenchmarkMapLarge(b *testing.B) {
 		return v.(int) * v.(int)
 	})
 }
+
+// benchmarkPowerSet checks the performance of the set.PowerSet() method
+func benchmarkPowerSet(n int, s *Set) {
+	// Run set.PowerSet() n times
+	for i := 0; i < n; i++ {
+		s.PowerSet()
+	}
+}
+
+// BenchmarkPowerSetSmall checks the performance of the set.PowerSet() method
+// over a small data set
+func BenchmarkPowerSetSmall(b *testing.B) {
+	benchmarkPowerSet(b.N, New(1, 2))
+}
+
+// BenchmarkPowerSetLarge checks the performance of the set.PowerSet() method
+// over a large data set
+func BenchmarkPowerSetLarge(b *testing.B) {
+	benchmarkPowerSet(b.N, New(1, 2, 3, 4, 5, 6, 7, 8, 9))
+}
