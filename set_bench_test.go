@@ -248,3 +248,14 @@ func BenchmarkRemove(b *testing.B) {
 		set.Remove(i)
 	}
 }
+
+// BenchmarkSize checks the performance of the set.Size() method
+func BenchmarkSize(b *testing.B) {
+	// Create a new set
+	set := New()
+
+	// Run set.Size() b.N times
+	for i := 0; i < b.N; i++ {
+		set.Size()
+	}
+}
