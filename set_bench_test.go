@@ -169,3 +169,27 @@ func BenchmarkIntersectionSmall(b *testing.B) {
 func BenchmarkIntersectionLarge(b *testing.B) {
 	benchmarkIntersection(b.N, New(1, 2, 3, 4, 5, 6, 7, 8, 9), New(9, 8, 7, 6, 5, 4, 3, 2, 1))
 }
+
+// benchmarkMap checks the performance of the set.Map() method
+func benchmarkMap(n int, s *Set, fn func(interface{}) interface{}) {
+	// Run set.Map() n times
+	for i := 0; i < n; i++ {
+		s.Map(fn)
+	}
+}
+
+// BenchmarkMapSmall checks the performance of the set.Map() method
+// over a small data set
+func BenchmarkMapSmall(b *testing.B) {
+	benchmarkMap(b.N, New(1, 2), func(v interface{}) interface{} {
+		return v.(int) * v.(int)
+	})
+}
+
+// BenchmarkMapLarge checks the performance of the set.Map() method
+// over a large data set
+func BenchmarkMapLarge(b *testing.B) {
+	benchmarkMap(b.N, New(1, 2, 3, 4, 5, 6, 7, 8, 9), func(v interface{}) interface{} {
+		return v.(int) * v.(int)
+	})
+}
