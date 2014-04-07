@@ -74,3 +74,23 @@ func BenchmarkDifferenceSmall(b *testing.B) {
 func BenchmarkDifferenceLarge(b *testing.B) {
 	benchmarkDifference(b.N, New(1, 2, 3, 4, 5, 6, 7, 8, 9), New(9, 8, 7, 6, 5, 4, 3, 2, 1))
 }
+
+// benchmarkEnumerate checks the performance of the set.Enumerate() method
+func benchmarkEnumerate(n int, s *Set) {
+	// Run set.Enumerate() n times
+	for i := 0; i < n; i++ {
+		s.Enumerate()
+	}
+}
+
+// BenchmarkEnumerateSmall checks the performance of the set.Enumerate() method
+// over a small data set
+func BenchmarkEnumerateSmall(b *testing.B) {
+	benchmarkEnumerate(b.N, New(1, 2))
+}
+
+// BenchmarkEnumerateLarge checks the performance of the set.Enumerate() method
+// over a large data set
+func BenchmarkEnumerateLarge(b *testing.B) {
+	benchmarkEnumerate(b.N, New(1, 2, 3, 4, 5, 6, 7, 8, 9))
+}
