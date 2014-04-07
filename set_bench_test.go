@@ -54,3 +54,23 @@ func BenchmarkCloneSmall(b *testing.B) {
 func BenchmarkCloneLarge(b *testing.B) {
 	benchmarkClone(b.N, New(1, 2, 3, 4, 5, 6, 7, 8, 9))
 }
+
+// benchmarkDifference checks the performance of the set.Difference() method
+func benchmarkDifference(n int, s *Set, t *Set) {
+	// Run set.Difference() n times
+	for i := 0; i < n; i++ {
+		s.Difference(t)
+	}
+}
+
+// BenchmarkDifferenceSmall checks the performance of the set.Difference() method
+// over a small data set
+func BenchmarkDifferenceSmall(b *testing.B) {
+	benchmarkDifference(b.N, New(1, 2), New(2, 1))
+}
+
+// BenchmarkDifferenceLarge checks the performance of the set.Difference() method
+// over a large data set
+func BenchmarkDifferenceLarge(b *testing.B) {
+	benchmarkDifference(b.N, New(1, 2, 3, 4, 5, 6, 7, 8, 9), New(9, 8, 7, 6, 5, 4, 3, 2, 1))
+}
