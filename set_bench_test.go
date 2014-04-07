@@ -149,3 +149,23 @@ func BenchmarkHas(b *testing.B) {
 		set.Has(i)
 	}
 }
+
+// benchmarkIntersection checks the performance of the set.Intersection() method
+func benchmarkIntersection(n int, s *Set, t *Set) {
+	// Run set.Intersection() n times
+	for i := 0; i < n; i++ {
+		s.Intersection(t)
+	}
+}
+
+// BenchmarkIntersectionSmall checks the performance of the set.Intersection() method
+// over a small data set
+func BenchmarkIntersectionSmall(b *testing.B) {
+	benchmarkIntersection(b.N, New(1, 2), New(2, 1))
+}
+
+// BenchmarkIntersectionLarge checks the performance of the set.Intersection() method
+// over a large data set
+func BenchmarkIntersectionLarge(b *testing.B) {
+	benchmarkIntersection(b.N, New(1, 2, 3, 4, 5, 6, 7, 8, 9), New(9, 8, 7, 6, 5, 4, 3, 2, 1))
+}
