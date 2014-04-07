@@ -94,3 +94,23 @@ func BenchmarkEnumerateSmall(b *testing.B) {
 func BenchmarkEnumerateLarge(b *testing.B) {
 	benchmarkEnumerate(b.N, New(1, 2, 3, 4, 5, 6, 7, 8, 9))
 }
+
+// benchmarkEqual checks the performance of the set.Equal() method
+func benchmarkEqual(n int, s *Set, t *Set) {
+	// Run set.Equal() n times
+	for i := 0; i < n; i++ {
+		s.Equal(t)
+	}
+}
+
+// BenchmarkEqualSmall checks the performance of the set.Equal() method
+// over a small data set
+func BenchmarkEqualSmall(b *testing.B) {
+	benchmarkEqual(b.N, New(1, 2), New(2, 1))
+}
+
+// BenchmarkEqualLarge checks the performance of the set.Equal() method
+// over a large data set
+func BenchmarkEqualLarge(b *testing.B) {
+	benchmarkEqual(b.N, New(1, 2, 3, 4, 5, 6, 7, 8, 9), New(9, 8, 7, 6, 5, 4, 3, 2, 1))
+}
