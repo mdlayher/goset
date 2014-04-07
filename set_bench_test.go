@@ -237,3 +237,14 @@ func BenchmarkReduceLarge(b *testing.B) {
 		return p.(int) + v.(int)
 	})
 }
+
+// BenchmarkRemove checks the performance of the set.Remove() method
+func BenchmarkRemove(b *testing.B) {
+	// Create a new set
+	set := New()
+
+	// Run set.Remove() b.N times
+	for i := 0; i < b.N; i++ {
+		set.Remove(i)
+	}
+}
