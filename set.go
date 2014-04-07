@@ -122,7 +122,7 @@ func (s *Set) Enumerate() []interface{} {
 
 	// Gather all values into a slice
 	values := make([]interface{}, 0)
-	for k, _ := range s.m {
+	for k := range s.m {
 		values = append(values, k)
 	}
 
@@ -286,7 +286,7 @@ func (s *Set) String() string {
 	}
 
 	// Print all elements
-	for k, _ := range s.m {
+	for k := range s.m {
 		// Print pairs separately
 		if pair, ok := k.(Pair); ok {
 			str = str + fmt.Sprintf("%v ", pair.String())
