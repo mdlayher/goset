@@ -279,3 +279,23 @@ func BenchmarkSubsetSmall(b *testing.B) {
 func BenchmarkSubsetLarge(b *testing.B) {
 	benchmarkSubset(b.N, New(1, 2, 3, 4, 5, 6, 7, 8, 9), New(9, 8, 7, 6, 5, 4, 3, 2, 1))
 }
+
+// benchmarkSymmetricDifference checks the performance of the set.SymmetricDifference() method
+func benchmarkSymmetricDifference(n int, s *Set, t *Set) {
+	// Run set.SymmetricDifference() n times
+	for i := 0; i < n; i++ {
+		s.SymmetricDifference(t)
+	}
+}
+
+// BenchmarkSymmetricDifferenceSmall checks the performance of the set.SymmetricDifference() method
+// over a small data set
+func BenchmarkSymmetricDifferenceSmall(b *testing.B) {
+	benchmarkSymmetricDifference(b.N, New(1, 2), New(2, 1))
+}
+
+// BenchmarkSymmetricDifferenceLarge checks the performance of the set.SymmetricDifference() method
+// over a large data set
+func BenchmarkSymmetricDifferenceLarge(b *testing.B) {
+	benchmarkSymmetricDifference(b.N, New(1, 2, 3, 4, 5, 6, 7, 8, 9), New(9, 8, 7, 6, 5, 4, 3, 2, 1))
+}
